@@ -1,17 +1,17 @@
-const express = require('express')
+const express = require('express') //1. ez keresi meg az express-t és importálja be, függvénnyel visszatér egy értékkel
 const fileUpload = require('express-fileupload')
-const path = require('path')
+const path = require('path') // ez is egy importálás, ez teszi lehetővé a fájlrendszerben a mozgást.
 const fs = require('fs')
 const app = express()
 const port = 9000
 
 app.use(fileUpload());
 
-app.get('/', (req, res) => {
+app.get('/', (req, res) => { //1. end point: minden egyes alkalmazásunk belépőpontja.
   res.sendFile(path.join(`${__dirname}/../frontend/index.html`))
 })
 
-app.use('/public', express.static(`${__dirname}/../frontend/public`))
+app.use('/public', express.static(`${__dirname}/../frontend/public`)) //2. end point: statikus nyilvános mappa elérhetővé tétele
 
 app.get('/data', (req, res) => {
   res.sendFile(path.join(`${__dirname}/data/data.json`))
