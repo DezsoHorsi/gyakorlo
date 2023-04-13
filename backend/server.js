@@ -1,16 +1,16 @@
-const express = require('express')
-const path = require('path')
-const app = express()
-const port = 9000
+const express = require('express') //1. ez keresi meg az express-t és importálja be, függvénnyel visszatér egy értékkel
+const path = require('path') // ez is egy importálás, ez teszi lehetővé a fájlrendszerben a mozgást.
+const app = express() //2. az elérési út kimentése változóba
+const port = 9000 //ez a kód végén van behívva az app.listenbe
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(`${__dirname}/../frontend/index.html`))
+  res.sendFile(path.join(`${__dirname}/../frontend/index.html`)) //1. end point: minden egyes alkalmazásunk belépőpontja.
 })
 
-app.use('/public', express.static(`${__dirname}/../frontend/public`))
+app.use('/public', express.static(`${__dirname}/../frontend/public`))  //2. end point: statikus nyilvános mappa elérhetővé tétele
 
-app.listen(port, () => {
-  console.log(`http://127.0.0.1:${port}`)
+app.listen(port, () => { //egy figyelő, itt mondjuk meg az appnak, hogy figyelje a portot, majd kiírja terminalba a szerver linkjét, így klikkelhetünk rá és megnyílik a böngiben, és megjelenik a hello world a viewporton (html-ből)
+  console.log(`http://127.0.0.1:${port}`) 
 })
 
 
