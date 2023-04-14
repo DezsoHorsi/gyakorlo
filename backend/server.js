@@ -1,12 +1,12 @@
 const express = require('express') //1. ez keresi meg az express-t és importálja be, függvénnyel visszatér egy értékkel
-const fileUpload = require('express-fileupload')
+const fileUpload = require('express-fileupload') //6.1 FILE FELTÖLTÉSE (BEJUTTATÁSA) FRONTENDRŐL BACKENDRE
 const path = require('path') // ez is egy importálás, ez teszi lehetővé a fájlrendszerben a mozgást.
 const fs = require('fs') //5.6 ez keresi meg az fs-t
 const app = express() //2. az elérési út kimentése változóba
 const port = 9000 //ez a kód végén van behívva az app.listenbe
 
 
-app.use(fileUpload());
+app.use(fileUpload()); //6.2 Ez egy middleware ( pl. app.use, app.get, app.post, app.delete, app.patch) : ha bejön valamilyen kérés a backendünkbe, akkor minden egyes middleware eldönti, hogy ez a kérés hozzá jött-e, és ha hozzá jött, akkor feldolgozza. Vagy nem hozzá jött, akkor átugorja és a kérés megy tovább a többi middleware-re. App.post és az app.get mutathat ugyanarra a címre. 
 
 app.get('/', (req, res) => { 
   res.sendFile(path.join(`${__dirname}/../frontend/index.html`)) //1. end point: minden egyes alkalmazásunk belépőpontja.
@@ -52,23 +52,23 @@ app.get('/data/:id', (req, res) => {  //5.1. ha pl. a böngibe beírjuk: http://
 		res.send("Elbénáztuk, Béláim")
 	}
 }) 
-//6. ADATOK BEJUTTATÁSA FRONTENDRŐL BACKENDRE
-app.post('/upload', (req, res) => {
-  let uploadedFile;
-  let savePath;
-	let imageName;
+//6. FILE FELTÖLTÉSE (BEJUTTATÁSA) FRONTENDRŐL BACKENDRE (mielőtt használjuk ezt, backendre telepítsük az npm install express-fileupload-ot a backend mappába: npm install express-upload)
+app.post('/upload', (req, res) => { //6.3
+  let uploadedFile; //ez eredetiben let sampleFile
+  let savePath; //ez eredetiben let uploadPath
+	let imageName; //ezt mi hozzuk létre
 
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).send('No files were uploaded.');
   }
 
   // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
-  uploadedFile = req.files.image;
-	imageName =  req.body.name;
-  savePath = `${__dirname}/../frontend/public/${imageName}.jpg`;
+  uploadedFile = req.files.image; 
+	imageName =  req.body.name; //6.4 ehhez az image-hez a js-filjban az appendnél használt paramétert rendeljük (formData.append('name', document.querySelector("input[type='text']").value) )
+  savePath = `${__dirname}/../frontend/public/${imageName}.jpg`; 
 
   // Use the mv() method to place the file somewhere on your server
-  uploadedFile.mv(savePath, (err) => {
+  uploadedFile.mv(savePath, (err) => { //6.5 it helyezzük el a képet a backendbe
     if (err)
       return res.status(500).send(err);
 
